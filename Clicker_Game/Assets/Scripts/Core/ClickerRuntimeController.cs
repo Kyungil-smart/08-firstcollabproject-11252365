@@ -11,7 +11,7 @@ public class ClickerRuntimeController : MonoBehaviour
         Bullish
     }
     
-    [Header("초기 시작 값")]
+    [Header("====초기 시작 값====")]
     [Tooltip("게임 시작 시 보유 금액\n0부터 시작")]
     [SerializeField] private double _startMoney = 0d;
     
@@ -31,12 +31,14 @@ public class ClickerRuntimeController : MonoBehaviour
     public double ClickPower => _clickPower;
     public MarketStateType CurrentMarketState => _currentMarketState;
     public double AutoIncomePerSecond => _autoIncomePerSecond;
+    public double CurrentClickIncome => _clickPower;
     
     private double _money;
     private double _asset;
     private double _clickPower;
     private MarketStateType _currentMarketState;
     private double _autoIncomePerSecond;
+    
 
     private void Awake()
     {
