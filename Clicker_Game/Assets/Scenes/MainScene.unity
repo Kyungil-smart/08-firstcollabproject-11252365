@@ -1448,6 +1448,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 664171004}
+  - component: {fileID: 664171005}
   m_Layer: 0
   m_Name: ResourceRoot
   m_TagString: Untagged
@@ -1470,6 +1471,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 613636748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &664171005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664171003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8730a5897af32344f888ac7d7c061e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickerRuntimeController
+  _startMoney: 10
+  _startClickPower: 2
+  _startMarketState: 1
+  _startAutoIncomePerSecond: 0
 --- !u!1 &739569432
 GameObject:
   m_ObjectHideFlags: 0
@@ -2924,7 +2941,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1744143480}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 664171005}
+        m_TargetAssemblyTypeName: ClickerRuntimeController, Assembly-CSharp
+        m_MethodName: ExecuteTrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1744143480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3295,6 +3324,7 @@ GameObject:
   - component: {fileID: 2059111148}
   - component: {fileID: 2059111147}
   - component: {fileID: 2059111149}
+  - component: {fileID: 2059111150}
   m_Layer: 5
   m_Name: HUDPanel_Top
   m_TagString: Untagged
@@ -3390,6 +3420,24 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2059111150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059111145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd57e25b1d4b9545ac8fe414f9413ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HudTopPanelView
+  _runtimeController: {fileID: 664171005}
+  _moneyValueText: {fileID: 1499607275}
+  _assetValueText: {fileID: 412905297}
+  _marketStateValueText: {fileID: 1133528856}
+  _clickPowerValueText: {fileID: 739569434}
+  _autoIncomeValueText: {fileID: 2120888096}
 --- !u!1 &2120888094
 GameObject:
   m_ObjectHideFlags: 0
