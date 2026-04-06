@@ -654,6 +654,7 @@ GameObject:
   - component: {fileID: 118473843}
   - component: {fileID: 118473842}
   - component: {fileID: 118473841}
+  - component: {fileID: 118473845}
   m_Layer: 5
   m_Name: UpgradeItem_ClickModule
   m_TagString: Untagged
@@ -766,6 +767,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 118473839}
   m_CullTransparentMesh: 1
+--- !u!114 &118473845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118473839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ab3e45724d2534cb9513cae06608bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
+  _upgradeStateController: {fileID: 639262132}
+  _upgradeId: click.click_module
+  _nameText: {fileID: 1987997119}
+  _descriptionText: {fileID: 1263551764}
+  _purchaseCountText: {fileID: 1658870817}
+  _nextCostText: {fileID: 1618886614}
+  _purchaseButton: {fileID: 423922426}
 --- !u!1 &254343685
 GameObject:
   m_ObjectHideFlags: 0
@@ -3345,6 +3365,7 @@ GameObject:
   - component: {fileID: 614392816}
   - component: {fileID: 614392815}
   - component: {fileID: 614392814}
+  - component: {fileID: 614392818}
   m_Layer: 5
   m_Name: UpgradeItem_AntBot
   m_TagString: Untagged
@@ -3457,6 +3478,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 614392812}
   m_CullTransparentMesh: 1
+--- !u!114 &614392818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614392812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ab3e45724d2534cb9513cae06608bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
+  _upgradeStateController: {fileID: 639262132}
+  _upgradeId: auto.ant_bot
+  _nameText: {fileID: 1182806808}
+  _descriptionText: {fileID: 44179695}
+  _purchaseCountText: {fileID: 472074114}
+  _nextCostText: {fileID: 769210204}
+  _purchaseButton: {fileID: 558675277}
 --- !u!1 &615416489
 GameObject:
   m_ObjectHideFlags: 0
@@ -4789,6 +4829,7 @@ GameObject:
   - component: {fileID: 967686344}
   - component: {fileID: 967686343}
   - component: {fileID: 967686342}
+  - component: {fileID: 967686346}
   m_Layer: 5
   m_Name: UpgradeItem_TradeSense
   m_TagString: Untagged
@@ -4901,6 +4942,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 967686340}
   m_CullTransparentMesh: 1
+--- !u!114 &967686346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967686340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ab3e45724d2534cb9513cae06608bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
+  _upgradeStateController: {fileID: 639262132}
+  _upgradeId: click.trade_sense
+  _nameText: {fileID: 254343687}
+  _descriptionText: {fileID: 791184441}
+  _purchaseCountText: {fileID: 1747425993}
+  _nextCostText: {fileID: 528459713}
+  _purchaseButton: {fileID: 587230173}
 --- !u!1 &1037182681
 GameObject:
   m_ObjectHideFlags: 0
@@ -6696,6 +6756,7 @@ GameObject:
   - component: {fileID: 1430597962}
   - component: {fileID: 1430597961}
   - component: {fileID: 1430597960}
+  - component: {fileID: 1430597964}
   m_Layer: 5
   m_Name: UpgradeItem_ProfitScanner
   m_TagString: Untagged
@@ -6808,6 +6869,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1430597958}
   m_CullTransparentMesh: 1
+--- !u!114 &1430597964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430597958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ab3e45724d2534cb9513cae06608bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
+  _upgradeStateController: {fileID: 639262132}
+  _upgradeId: auto.profit_scanner
+  _nameText: {fileID: 2121324050}
+  _descriptionText: {fileID: 841146462}
+  _purchaseCountText: {fileID: 1870272570}
+  _nextCostText: {fileID: 2113743621}
+  _purchaseButton: {fileID: 888086057}
 --- !u!1 &1471566861
 GameObject:
   m_ObjectHideFlags: 0
@@ -9730,6 +9810,7 @@ GameObject:
   - component: {fileID: 1956430129}
   - component: {fileID: 1956430128}
   - component: {fileID: 1956430127}
+  - component: {fileID: 1956430131}
   m_Layer: 5
   m_Name: UpgradeItem_AlphaEngine
   m_TagString: Untagged
@@ -9842,6 +9923,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1956430125}
   m_CullTransparentMesh: 1
+--- !u!114 &1956430131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956430125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ab3e45724d2534cb9513cae06608bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
+  _upgradeStateController: {fileID: 639262132}
+  _upgradeId: auto.alpha_engine
+  _nameText: {fileID: 1365324321}
+  _descriptionText: {fileID: 1374238066}
+  _purchaseCountText: {fileID: 2040884946}
+  _nextCostText: {fileID: 1129749434}
+  _purchaseButton: {fileID: 291646794}
 --- !u!1 &1987997117
 GameObject:
   m_ObjectHideFlags: 0
@@ -9992,6 +10092,7 @@ GameObject:
   - component: {fileID: 2013224184}
   - component: {fileID: 2013224183}
   - component: {fileID: 2013224182}
+  - component: {fileID: 2013224186}
   m_Layer: 5
   m_Name: UpgradeItem_FocusTrade
   m_TagString: Untagged
@@ -10104,6 +10205,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2013224180}
   m_CullTransparentMesh: 1
+--- !u!114 &2013224186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013224180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ab3e45724d2534cb9513cae06608bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
+  _upgradeStateController: {fileID: 639262132}
+  _upgradeId: click.focus_trade
+  _nameText: {fileID: 1223730046}
+  _descriptionText: {fileID: 1669248339}
+  _purchaseCountText: {fileID: 1883754724}
+  _nextCostText: {fileID: 389863837}
+  _purchaseButton: {fileID: 1570690944}
 --- !u!1 &2017097751
 GameObject:
   m_ObjectHideFlags: 0

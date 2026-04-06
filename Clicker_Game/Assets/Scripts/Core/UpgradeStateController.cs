@@ -18,6 +18,7 @@ public class UpgradeStateController : MonoBehaviour
 
     private void InitializeStates()
     {
+        _definitionById.Clear();
         _stateById.Clear();
 
         if (_upgradeDefinitions == null || _upgradeDefinitions.Length == 0)
@@ -77,8 +78,8 @@ public class UpgradeStateController : MonoBehaviour
         
         if (!_definitionById.TryGetValue(upgradeId, out UpgradeDataSO definition)) return false;
         
-        int purchaseCost = GetPurchaseCount(upgradeId);
-        nextCost = definition.GetNextCost(purchaseCost);
+        int purchaseCount = GetPurchaseCount(upgradeId);
+        nextCost = definition.GetNextCost(purchaseCount);
         return true;
     }
 }
