@@ -780,6 +780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
   _upgradeStateController: {fileID: 639262132}
+  _runtimeController: {fileID: 664171005}
   _upgradeId: click.click_module
   _nameText: {fileID: 1987997119}
   _descriptionText: {fileID: 1263551764}
@@ -3491,6 +3492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
   _upgradeStateController: {fileID: 639262132}
+  _runtimeController: {fileID: 664171005}
   _upgradeId: auto.ant_bot
   _nameText: {fileID: 1182806808}
   _descriptionText: {fileID: 44179695}
@@ -3769,6 +3771,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 688ca05390b8e994899710a690174bb4, type: 2}
   - {fileID: 11400000, guid: 1058555bb17fea941b540ac7537910a4, type: 2}
   - {fileID: 11400000, guid: 2f39790fc66f6ff4aaa8de9320fd9996, type: 2}
+  _runtimeController: {fileID: 664171005}
 --- !u!1 &639494352
 GameObject:
   m_ObjectHideFlags: 0
@@ -4955,6 +4958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
   _upgradeStateController: {fileID: 639262132}
+  _runtimeController: {fileID: 664171005}
   _upgradeId: click.trade_sense
   _nameText: {fileID: 254343687}
   _descriptionText: {fileID: 791184441}
@@ -6882,6 +6886,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
   _upgradeStateController: {fileID: 639262132}
+  _runtimeController: {fileID: 664171005}
   _upgradeId: auto.profit_scanner
   _nameText: {fileID: 2121324050}
   _descriptionText: {fileID: 841146462}
@@ -9936,6 +9941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
   _upgradeStateController: {fileID: 639262132}
+  _runtimeController: {fileID: 664171005}
   _upgradeId: auto.alpha_engine
   _nameText: {fileID: 1365324321}
   _descriptionText: {fileID: 1374238066}
@@ -10218,6 +10224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeItemView
   _upgradeStateController: {fileID: 639262132}
+  _runtimeController: {fileID: 664171005}
   _upgradeId: click.focus_trade
   _nameText: {fileID: 1223730046}
   _descriptionText: {fileID: 1669248339}

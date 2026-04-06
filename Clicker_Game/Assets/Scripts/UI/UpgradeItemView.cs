@@ -1,12 +1,16 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeItemView : MonoBehaviour
 {
-    [Header("====런타임 참조")]
+    [Header("====런타임 참조====")]
     [Tooltip("업그레이드 상태 및 계산값 조회 참조")]
     [SerializeField] private UpgradeStateController _upgradeStateController;
+    
+    [Tooltip("현재 보유 Money 변화 런타임 참조")]
+    [SerializeField] private ClickerRuntimeController _runtimeController;
     
     [Header("=====업그레이드 식별====")]
     [Tooltip("표시할 업그레이드의 ID")]
@@ -25,22 +29,57 @@ public class UpgradeItemView : MonoBehaviour
     [Tooltip("다음 구매 비용 텍스트")]
     [SerializeField] private TMP_Text _nextCostText;
     
-    [Tooltip("구매 버튼 참조")]
+    [Tooltip("구매 버튼")]
     [SerializeField] private Button _purchaseButton;
 
-    private void Start() => Refresh();
+    private void OnEnable()
+    {
+        if (_runtimeController != null)
+        {
+            _runtimeController.StateChanged += Refresh;
+        }
+
+        if (_purchaseButton != null)
+        {
+            _purchaseButton.onClick.AddListener(HandlePurchaseButtonClicked);
+        }
+
+        Refresh();
+    }
+
+    private void OnDisable()
+    {
+        if (_runtimeController != null)
+        {
+            _runtimeController.StateChanged -= Refresh;
+        }
+
+        if (_purchaseButton != null)
+        {
+            _purchaseButton.onClick.RemoveListener(HandlePurchaseButtonClicked);
+        }
+    }
 
     public void Refresh()
     {
         if (_upgradeStateController == null)
         {
             Debug.LogWarning("[UpgradeItemView] UpgradeStateController가 연결되지 않았습니다.", this);
+            SetButtonInteractable(false);
+            return;
+        }
+        
+        if (_runtimeController == null)
+        {
+            Debug.LogWarning("[UpgradeItemView] RuntimeController가 연결되지 않았습니다.", this);
+            SetButtonInteractable(false);
             return;
         }
 
         if (string.IsNullOrWhiteSpace(_upgradeId))
         {
             Debug.LogWarning("[UpgradeItemView] UpgradeId가 비어 있습니다.", this);
+            SetButtonInteractable(false);
             return;
         }
 
@@ -56,12 +95,29 @@ public class UpgradeItemView : MonoBehaviour
         if (_upgradeStateController.TryGetNextCost(_upgradeId, out double nextCost))
         {
             if (_nextCostText != null) _nextCostText.text = $"다음 비용 : ${nextCost:N0}";
+            
+            SetButtonInteractable(_runtimeController.Money >= nextCost);
         }
         else
         {
             if (_nextCostText != null) _nextCostText.text = "다음 비용 : -";
+            
+            SetButtonInteractable(false);
         }
 
     }
 
+    private void HandlePurchaseButtonClicked()
+    {
+        if (_upgradeStateController == null) return;
+        
+        _upgradeStateController.TryPurchase(_upgradeId);
+    }
+
+    private void SetButtonInteractable(bool canPurchase)
+    {
+        if (_purchaseButton == null) return;
+        _purchaseButton.interactable = canPurchase;
+    }
+    
 }

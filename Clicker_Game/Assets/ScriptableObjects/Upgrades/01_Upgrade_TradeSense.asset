@@ -15,7 +15,8 @@ MonoBehaviour:
   _id: click.trade_sense
   _name: "\uAC70\uB798 \uAC10\uAC01 \uD5A5\uC0C1"
   _category: 0
-  _description: "\uAD6C\uB9E4 1\uD68C\uB2F9 \uD074\uB9AD \uD30C\uC6CC +1"
+  _description: "\uAD6C\uB9E4 1\uD68C\uB2F9 \uD074\uB9AD \uD30C\uC6CC +1\n\uD14C\uC2A4\uD2B8
+    \uAE00 : hello"
   _baseCost: 10
   _costGrowthMultiplier: 1.15
   _effectValue: 1

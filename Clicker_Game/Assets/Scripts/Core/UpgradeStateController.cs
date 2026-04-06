@@ -7,6 +7,10 @@ public class UpgradeStateController : MonoBehaviour
     [Header("====업그레이드 원본 데이터====")]
     [Tooltip("업그레이드 원본 데이터 목록")]
     [SerializeField] private UpgradeDataSO[] _upgradeDefinitions;
+    
+    [Header("====런타임 참조====")]
+    [Tooltip("현재 보유 Money 변화 런타임 참조")]
+    [SerializeField] private ClickerRuntimeController _runtimeController;
 
     private readonly Dictionary<string, UpgradeDataSO>  _definitionById = new();
     private readonly Dictionary<string, UpgradeRuntimeState> _stateById = new();
@@ -80,6 +84,26 @@ public class UpgradeStateController : MonoBehaviour
         
         int purchaseCount = GetPurchaseCount(upgradeId);
         nextCost = definition.GetNextCost(purchaseCount);
+        return true;
+    }
+
+    public bool TryPurchase(string upgradeId)
+    {
+        if (_runtimeController == null)
+        {
+            Debug.LogWarning("[UpgradeStateController] RuntimeController가 연결되지 않았습니다.", this);
+            return false;
+        }
+
+        if (!_stateById.TryGetValue(upgradeId, out UpgradeRuntimeState state)) return false;
+        if (!_definitionById.TryGetValue(upgradeId, out UpgradeDataSO definition)) return false;
+        
+        double nextCost = definition.GetNextCost(state.PurchaseCount);
+
+        if (!_runtimeController.TrySpendMoney(nextCost)) return false;
+        
+        state.IncreasePurchaseCount();
+        _runtimeController.NotifyStateChanged();
         return true;
     }
 }

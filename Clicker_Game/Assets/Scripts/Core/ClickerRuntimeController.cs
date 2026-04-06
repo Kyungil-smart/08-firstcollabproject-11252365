@@ -77,6 +77,16 @@ public class ClickerRuntimeController : MonoBehaviour
         NotifyStateChanged();
     }
 
+    public bool TrySpendMoney(double amount)
+    {
+        if (amount <= 0d) return false;
+        if (_money < amount) return false;
+        
+        _money -= amount;
+        RecalculateAsset();
+        return true;
+    }
+    
     private void RecalculateAsset()
     {
         // 현재는 자동 투자 업그레이드가 없으므로 Asset을 Money와 동일하게 처리
@@ -84,7 +94,7 @@ public class ClickerRuntimeController : MonoBehaviour
         _asset = _money;
     }
 
-    private void NotifyStateChanged()
+    public void NotifyStateChanged()
     {
         StateChanged?.Invoke();
     }
