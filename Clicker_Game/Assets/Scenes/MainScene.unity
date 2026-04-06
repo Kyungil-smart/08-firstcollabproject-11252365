@@ -3869,6 +3869,8 @@ GameObject:
   m_Component:
   - component: {fileID: 664171004}
   - component: {fileID: 664171005}
+  - component: {fileID: 664171006}
+  - component: {fileID: 664171007}
   m_Layer: 0
   m_Name: ResourceRoot
   m_TagString: Untagged
@@ -3904,9 +3906,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickerRuntimeController
   _startMoney: 0
-  _startClickPower: 1
   _startMarketState: 1
   _startAutoIncomePerSecond: 0
+  _clickIncomeCalculator: {fileID: 664171006}
+  _autoIncomeCalculator: {fileID: 664171007}
+--- !u!114 &664171006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664171003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec2d74a448febf4a9429e8742137af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickIncomeCalculator
+  _upgradeStateController: {fileID: 639262132}
+  _baseClickPower: 1
+--- !u!114 &664171007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664171003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2837565897a3e924a87961a834e33cb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoIncomeCalculator
+  _upgradeStateController: {fileID: 639262132}
 --- !u!1 &739569432
 GameObject:
   m_ObjectHideFlags: 0

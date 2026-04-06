@@ -19,12 +19,12 @@ public class ClickerRuntimeController : MonoBehaviour
     [Tooltip("게임 시작 시 표시할 시장 상태\n현재는 보합장으로 시작")]
     [SerializeField] private MarketStateType _startMarketState = MarketStateType.Neutral;
 
-    [Tooltip("자동 수익 시스템 연결 전까지 HUD 표시용으로 사용하는 임시 시작값\n현재 단계 기본값은 0")]
-    [SerializeField] private double _startAutoIncomePerSecond = 0d;
-
-    [Header("계산 참조")]
+    [Header("====계산 참조====")]
     [Tooltip("ResourceRoot에 함께 배치한 ClickIncomeCalculator\nHUD 클릭 파워와 거래 실행 수익 계산에 사용")]
     [SerializeField] private ClickIncomeCalculator _clickIncomeCalculator;
+    
+    [Tooltip("ResourceRoot에 함께 배치한 AutoIncomeCalculator\nHUD 초당 수익 계산에 사용")]
+    [SerializeField] private AutoIncomeCalculator _autoIncomeCalculator;
     
     public event Action StateChanged;
 
@@ -32,16 +32,12 @@ public class ClickerRuntimeController : MonoBehaviour
     public double Asset => _asset;
     public double ClickPower => _clickIncomeCalculator != null ? _clickIncomeCalculator.ClickPower : 1d;
     public MarketStateType CurrentMarketState => _currentMarketState;
-    
-    // TEMP: 자동 수익 계산기는 아직 만들지 않았으므로
-    // 지금은 기존 임시 표시값 구조를 유지
-    public double AutoIncomePerSecond => _autoIncomePerSecond;
+    public double AutoIncomePerSecond => _autoIncomeCalculator != null ? _autoIncomeCalculator.AutoIncomePerSecond : 0d;
     public double CurrentClickIncome => _clickIncomeCalculator != null ? _clickIncomeCalculator.ClickIncome : 1d;
     
     private double _money;
     private double _asset;
     private MarketStateType _currentMarketState;
-    private double _autoIncomePerSecond;
     
     private void Awake()
     {
@@ -58,13 +54,20 @@ public class ClickerRuntimeController : MonoBehaviour
                 "현재는 기본 클릭 수익 1 기준으로 동작합니다.",
                 this);
         }
+
+        if (_autoIncomeCalculator == null)
+        {
+            Debug.LogWarning(
+                "[ClickerRuntimeController] AutoIncomeCalculator가 연결되지 않았습니다. " +
+                "현재는 초당 수익 0 기준으로 동작합니다.",
+                this);
+        }
     }
     
     private void InitializeRuntime()
     {
         _money = _startMoney;
         _currentMarketState = _startMarketState;
-        _autoIncomePerSecond = _startAutoIncomePerSecond;
 
         RecalculateAsset();
         NotifyStateChanged();
