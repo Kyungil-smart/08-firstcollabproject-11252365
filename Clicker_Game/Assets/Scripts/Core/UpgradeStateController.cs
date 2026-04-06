@@ -8,6 +8,7 @@ public class UpgradeStateController : MonoBehaviour
     [Tooltip("업그레이드 원본 데이터 목록")]
     [SerializeField] private UpgradeDataSO[] _upgradeDefinitions;
 
+    private readonly Dictionary<string, UpgradeDataSO>  _definitionById = new();
     private readonly Dictionary<string, UpgradeRuntimeState> _stateById = new();
     
     public IReadOnlyList<UpgradeDataSO> UpgradeDefinitions => _upgradeDefinitions;
@@ -50,10 +51,16 @@ public class UpgradeStateController : MonoBehaviour
                 continue;
             }
 
+            _definitionById.Add(upgradeDefinition.Id, upgradeDefinition);
             _stateById.Add(upgradeDefinition.Id, new UpgradeRuntimeState(upgradeDefinition.Id));
         }
     }
 
+    public bool TryGetDefinition(string upgradeId, out UpgradeDataSO definition)
+    {
+        return _definitionById.TryGetValue(upgradeId, out definition);
+    }
+    
     public bool TryGetState(string upgradeId, out UpgradeRuntimeState state)
     {
         return _stateById.TryGetValue(upgradeId, out state);
@@ -62,5 +69,16 @@ public class UpgradeStateController : MonoBehaviour
     public int GetPurchaseCount(string upgradeId)
     {
         return _stateById.TryGetValue(upgradeId, out UpgradeRuntimeState state) ? state.PurchaseCount : 0;
+    }
+
+    public bool TryGetNextCost(string upgradeId, out double nextCost)
+    {
+        nextCost = 0;
+        
+        if (!_definitionById.TryGetValue(upgradeId, out UpgradeDataSO definition)) return false;
+        
+        int purchaseCost = GetPurchaseCount(upgradeId);
+        nextCost = definition.GetNextCost(purchaseCost);
+        return true;
     }
 }

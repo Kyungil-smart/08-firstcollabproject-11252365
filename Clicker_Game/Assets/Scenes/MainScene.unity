@@ -3860,7 +3860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8730a5897af32344f888ac7d7c061e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickerRuntimeController
-  _startMoney: 10
+  _startMoney: 0
   _startClickPower: 1
   _startMarketState: 1
   _startAutoIncomePerSecond: 0
