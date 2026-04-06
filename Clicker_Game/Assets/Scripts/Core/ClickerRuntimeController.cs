@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class ClickerRuntimeController : MonoBehaviour
 {
-    // TODO : 시장 상태 원본 데이터가 생기면 ID / 데이터 참조 구조로 확장
+    // TODO: 시장 상태 시스템이 생기면 enum 직접 보관 대신
+    //  별도 시장 상태 런타임 시스템 참조 구조로 정리
     public enum MarketStateType
     {
         Bearish,
@@ -15,47 +16,60 @@ public class ClickerRuntimeController : MonoBehaviour
     [Tooltip("게임 시작 시 보유 금액\n0부터 시작")]
     [SerializeField] private double _startMoney = 0d;
     
-    [Tooltip("게임 시작 시 기본 클릭 파워\n초기값은 1")]
-    [SerializeField] private double _startClickPower = 1d;
-    
-    [Tooltip("게임 시작 시 표시할 시장 상태 이름\n시작 상태는 보합장")]
+    [Tooltip("게임 시작 시 표시할 시장 상태\n현재는 보합장으로 시작")]
     [SerializeField] private MarketStateType _startMarketState = MarketStateType.Neutral;
-    
-    [Tooltip("게임 시작 시 자동 수익 값\n초기값은 0")]
+
+    [Tooltip("자동 수익 시스템 연결 전까지 HUD 표시용으로 사용하는 임시 시작값\n현재 단계 기본값은 0")]
     [SerializeField] private double _startAutoIncomePerSecond = 0d;
+
+    [Header("계산 참조")]
+    [Tooltip("ResourceRoot에 함께 배치한 ClickIncomeCalculator\nHUD 클릭 파워와 거래 실행 수익 계산에 사용")]
+    [SerializeField] private ClickIncomeCalculator _clickIncomeCalculator;
     
     public event Action StateChanged;
 
     public double Money => _money;
     public double Asset => _asset;
-    public double ClickPower => _clickPower;
+    public double ClickPower => _clickIncomeCalculator != null ? _clickIncomeCalculator.ClickPower : 1d;
     public MarketStateType CurrentMarketState => _currentMarketState;
+    
+    // TEMP: 자동 수익 계산기는 아직 만들지 않았으므로
+    // 지금은 기존 임시 표시값 구조를 유지
     public double AutoIncomePerSecond => _autoIncomePerSecond;
-    public double CurrentClickIncome => _clickPower;
+    public double CurrentClickIncome => _clickIncomeCalculator != null ? _clickIncomeCalculator.ClickIncome : 1d;
     
     private double _money;
     private double _asset;
-    private double _clickPower;
     private MarketStateType _currentMarketState;
     private double _autoIncomePerSecond;
     
-
     private void Awake()
     {
+        ValidateReferences();
         InitializeRuntime();
+    }
+    
+    private void ValidateReferences()
+    {
+        if (_clickIncomeCalculator == null)
+        {
+            Debug.LogWarning(
+                "[ClickerRuntimeController] ClickIncomeCalculator가 연결되지 않았습니다. " +
+                "현재는 기본 클릭 수익 1 기준으로 동작합니다.",
+                this);
+        }
     }
     
     private void InitializeRuntime()
     {
         _money = _startMoney;
-        _clickPower = _startClickPower;
         _currentMarketState = _startMarketState;
         _autoIncomePerSecond = _startAutoIncomePerSecond;
-        
+
         RecalculateAsset();
         NotifyStateChanged();
-        
-        // TODO : 저장 / 로드 
+
+        // TODO: 저장 / 로드 시스템이 연결되면 초기값 세팅 후 로드 값으로 덮어쓴다.
     }
     
     public string CurrentMarketStateDisplayName =>  _currentMarketState switch
@@ -68,11 +82,8 @@ public class ClickerRuntimeController : MonoBehaviour
 
     public void ExecuteTrade()
     {
-        // 아직은 업그레이드와 시장 상태 배율 없으므로
-        // 현재는 클릭 1회 수익을 ClickPower 그대로 사용한다.
-        // TODO: 업그레이드 / 시장 상태가 붙으면 최종 클릭 수익 계산 함수로 분리
-        _money += _clickPower;
-        
+        _money += CurrentClickIncome;
+
         RecalculateAsset();
         NotifyStateChanged();
     }
@@ -81,7 +92,7 @@ public class ClickerRuntimeController : MonoBehaviour
     {
         if (amount <= 0d) return false;
         if (_money < amount) return false;
-        
+
         _money -= amount;
         RecalculateAsset();
         return true;
@@ -89,8 +100,8 @@ public class ClickerRuntimeController : MonoBehaviour
     
     private void RecalculateAsset()
     {
-        // 현재는 자동 투자 업그레이드가 없으므로 Asset을 Money와 동일하게 처리
-        // TODO: 자동 투자 업그레이드 구매 상태가 붙으면 누적 구매 비용 합을 반영한다.
+        // TEMP: 자동 투자 업그레이드 누적 비용 계산이 아직 없으므로
+        // 지금은 Asset을 Money와 동일하게 표시
         _asset = _money;
     }
 
