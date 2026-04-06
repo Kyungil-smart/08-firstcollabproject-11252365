@@ -3687,6 +3687,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 639262131}
+  - component: {fileID: 639262132}
   m_Layer: 0
   m_Name: UpgradeRoot
   m_TagString: Untagged
@@ -3709,6 +3710,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 613636748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &639262132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639262130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5edbfb69956b44ebe623a36d9fa037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeStateController
+  _upgradeDefinitions:
+  - {fileID: 11400000, guid: abe460633d7a49c4abb0710f5b5be3b2, type: 2}
+  - {fileID: 11400000, guid: f37330a587939fd4f90caf6cfca2233a, type: 2}
+  - {fileID: 11400000, guid: a976799344c9ec0418048f1e0dd492a3, type: 2}
+  - {fileID: 11400000, guid: 688ca05390b8e994899710a690174bb4, type: 2}
+  - {fileID: 11400000, guid: 1058555bb17fea941b540ac7537910a4, type: 2}
+  - {fileID: 11400000, guid: 2f39790fc66f6ff4aaa8de9320fd9996, type: 2}
 --- !u!1 &639494352
 GameObject:
   m_ObjectHideFlags: 0
@@ -3841,7 +3861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickerRuntimeController
   _startMoney: 10
-  _startClickPower: 2
+  _startClickPower: 1
   _startMarketState: 1
   _startAutoIncomePerSecond: 0
 --- !u!1 &739569432
