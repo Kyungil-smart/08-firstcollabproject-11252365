@@ -90,6 +90,16 @@ public class ClickerRuntimeController : MonoBehaviour
         RecalculateAsset();
         NotifyStateChanged();
     }
+    
+    public void AddMoneyFromAutoIncome(double amount)
+    {
+        if (amount <= 0d) return;
+
+        _money += amount;
+
+        RecalculateAsset();
+        NotifyStateChanged();
+    }
 
     public bool TrySpendMoney(double amount)
     {
