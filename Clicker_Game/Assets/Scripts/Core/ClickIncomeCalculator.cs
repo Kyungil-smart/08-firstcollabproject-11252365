@@ -8,6 +8,9 @@ public class ClickIncomeCalculator : MonoBehaviour
              "수동 거래 강화 업그레이드 상태와 원본 데이터 읽을때 사용")]
     [SerializeField] private UpgradeStateController _upgradeStateController;
     
+    [Tooltip("MarketStateRoot에 배치된 MarketStateController\n현재 시장 상태 수익 배율을 읽을 때 사용")]
+    [SerializeField] private MarketStateController _marketStateController;
+    
     [Header("====클릭 수익 계산 기준 값====")]
     [Tooltip("업그레이드 효과를 더하기 전 기본 클릭 파워")]
     [SerializeField, Min(0f)] private double _baseClickPower = 1d;
@@ -51,7 +54,8 @@ public class ClickIncomeCalculator : MonoBehaviour
     
     private double GetCurrentMarketMultiplier()
     {
-        // TEMP : 시장 상태 시스템 아직없으므로 임시로 배율 1.0 사용
-        return 1d;
+        return _marketStateController != null
+            ? _marketStateController.CurrentIncomeMultiplier
+            : 1d;
     }
 }

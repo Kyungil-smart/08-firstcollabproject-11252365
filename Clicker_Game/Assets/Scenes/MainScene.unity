@@ -3906,7 +3906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8730a5897af32344f888ac7d7c061e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickerRuntimeController
-  _startMoney: 0
+  _startMoney: 100
   _clickIncomeCalculator: {fileID: 664171006}
   _autoIncomeCalculator: {fileID: 664171007}
   _marketStateController: {fileID: 1037182683}
@@ -3923,6 +3923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickIncomeCalculator
   _upgradeStateController: {fileID: 639262132}
+  _marketStateController: {fileID: 1037182683}
   _baseClickPower: 1
 --- !u!114 &664171007
 MonoBehaviour:
@@ -3937,6 +3938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoIncomeCalculator
   _upgradeStateController: {fileID: 639262132}
+  _marketStateController: {fileID: 1037182683}
 --- !u!114 &664171008
 MonoBehaviour:
   m_ObjectHideFlags: 0
