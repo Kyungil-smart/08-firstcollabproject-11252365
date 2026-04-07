@@ -67,6 +67,8 @@ public class ClickerRuntimeController : MonoBehaviour
         // TODO: 저장 / 로드 시스템이 연결되면 초기값 세팅 후 로드 값으로 덮어쓴다.
     }
     
+    public void SetMoneyFromSave(double money) => _money = Math.Max(0d, money);
+    
     public void ExecuteTrade()
     {
         _money += CurrentClickIncome;

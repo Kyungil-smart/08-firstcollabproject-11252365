@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class UpgradePurchaseService : MonoBehaviour
@@ -9,6 +10,8 @@ public class UpgradePurchaseService : MonoBehaviour
     [Tooltip("현재 Money 차감과 구매 완료 후 상태 갱신에 사용")]
     [SerializeField] private ClickerRuntimeController _runtimeController;
 
+    public event Action<string> PurchaseSucceeded;
+    
     public bool TryPurchase(string upgradeId)
     {
         if (_upgradeStateController == null)
@@ -31,7 +34,12 @@ public class UpgradePurchaseService : MonoBehaviour
         
         if (!_upgradeStateController.TryGetNextCost(upgradeId, out double nextCost)) return false;
         
-        return _runtimeController.TryApplyPurchaseTransaction(
+        bool purchased = _runtimeController.TryApplyPurchaseTransaction(
             nextCost, () => _upgradeStateController.TryIncreasePurchaseCount(upgradeId));
+        
+        if (!purchased) return false;
+
+        PurchaseSucceeded?.Invoke(upgradeId);
+        return true;
     }
 }

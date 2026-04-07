@@ -89,4 +89,24 @@ public class UpgradeStateController : MonoBehaviour
         state.IncreasePurchaseCount();
         return true;
     }
+
+    public void ApplyLoadedPurchaseCounts(List<UpgradeStateSaveData> loadedStates)
+    {
+        foreach (UpgradeRuntimeState state in _stateById.Values)
+        {
+            state.SetPurchaseCount(0);
+        }
+        
+        if (loadedStates == null) return;
+
+        foreach (UpgradeStateSaveData loadedState in loadedStates)
+        {
+            if (loadedState == null) return;
+
+            if (_stateById.TryGetValue(loadedState.UpgradeId, out UpgradeRuntimeState state))
+            {
+                state.SetPurchaseCount(loadedState.PurchaseCount);
+            }
+        }
+    }
 }

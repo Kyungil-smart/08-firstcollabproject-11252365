@@ -1898,6 +1898,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418005880}
+  - component: {fileID: 418005881}
   m_Layer: 0
   m_Name: SaveRoot
   m_TagString: Untagged
@@ -1920,6 +1921,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 613636748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &418005881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418005879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f847f4cebe39c847ad5909fd72b8c78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaveController
+  _runtimeController: {fileID: 664171005}
+  _upgradeStateController: {fileID: 639262132}
+  _marketStateController: {fileID: 1037182683}
+  _upgradePurchaseService: {fileID: 639262133}
+  _saveFileName: clicker_save.json
+  _autoSaveIntervalSeconds: 60
 --- !u!1 &423922423
 GameObject:
   m_ObjectHideFlags: 0
@@ -3774,7 +3793,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 688ca05390b8e994899710a690174bb4, type: 2}
   - {fileID: 11400000, guid: 1058555bb17fea941b540ac7537910a4, type: 2}
   - {fileID: 11400000, guid: 2f39790fc66f6ff4aaa8de9320fd9996, type: 2}
-  _runtimeController: {fileID: 664171005}
 --- !u!114 &639262133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3985,7 +4003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5197068db88ad47ae402c21138dc47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AssetCalculator
-  _UpgradeStateController: {fileID: 639262132}
+  _upgradeStateController: {fileID: 639262132}
 --- !u!1 &739569432
 GameObject:
   m_ObjectHideFlags: 0

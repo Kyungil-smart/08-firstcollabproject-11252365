@@ -36,6 +36,8 @@ public class MarketStateController : MonoBehaviour
         _elapsedTime = 0f;
         _consecutiveSameStateCount = _currentState != null ? 1 : 0;
     }
+    
+    public void ResetStateForLoad() => InitializeState();
 
     private MarketStateDataSO ResolveStartState()
     {
@@ -101,6 +103,5 @@ public class MarketStateController : MonoBehaviour
 
         _currentState = nextState;
         StateChanged?.Invoke();
-
     }
 }
