@@ -3869,6 +3869,7 @@ GameObject:
   m_Component:
   - component: {fileID: 664171004}
   - component: {fileID: 664171005}
+  - component: {fileID: 664171009}
   - component: {fileID: 664171006}
   - component: {fileID: 664171007}
   - component: {fileID: 664171008}
@@ -3907,6 +3908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickerRuntimeController
   _startMoney: 100
+  _assetCalculator: {fileID: 664171009}
   _clickIncomeCalculator: {fileID: 664171006}
   _autoIncomeCalculator: {fileID: 664171007}
   _marketStateController: {fileID: 1037182683}
@@ -3954,6 +3956,19 @@ MonoBehaviour:
   _runtimeController: {fileID: 664171005}
   _autoIncomeCalculator: {fileID: 664171007}
   _tickInterval: 0.1
+--- !u!114 &664171009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664171003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a5197068db88ad47ae402c21138dc47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AssetCalculator
+  _UpgradeStateController: {fileID: 639262132}
 --- !u!1 &739569432
 GameObject:
   m_ObjectHideFlags: 0

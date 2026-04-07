@@ -8,6 +8,9 @@ public class ClickerRuntimeController : MonoBehaviour
     [SerializeField] private double _startMoney = 0d;
 
     [Header("====계산 참조====")]
+    [Tooltip("ResourceRoot에 함께 배치한 AssetCalculator\n현재 총 자산 계산에 사용")]
+    [SerializeField] private AssetCalculator _assetCalculator;
+    
     [Tooltip("ResourceRoot에 함께 배치한 ClickIncomeCalculator\nHUD 클릭 파워와 거래 실행 수익 계산에 사용")]
     [SerializeField] private ClickIncomeCalculator _clickIncomeCalculator;
     
@@ -36,6 +39,12 @@ public class ClickerRuntimeController : MonoBehaviour
     private double _money;
     private double _asset;
     
+    
+    private void Awake()
+    {
+        ValidateReferences();
+        InitializeRuntime();
+    }
     private void OnEnable()
     {
         if (_marketStateController != null)
@@ -48,10 +57,58 @@ public class ClickerRuntimeController : MonoBehaviour
             _marketStateController.StateChanged -= HandleMarketStateChanged;
     }
     
-    private void Awake()
+    private void InitializeRuntime()
     {
-        ValidateReferences();
-        InitializeRuntime();
+        _money = _startMoney;
+
+        RecalculateAsset();
+        NotifyStateChanged();
+
+        // TODO: 저장 / 로드 시스템이 연결되면 초기값 세팅 후 로드 값으로 덮어쓴다.
+    }
+    
+    public void ExecuteTrade()
+    {
+        _money += CurrentClickIncome;
+        RefreshCalculatedState();
+    }
+    
+    public void AddMoneyFromAutoIncome(double amount)
+    {
+        if (amount <= 0d) return;
+
+        _money += amount;
+        RefreshCalculatedState();
+    }
+    public bool TrySpendMoney(double amount)
+    {
+        if (amount <= 0d) return false;
+        if (_money < amount) return false;
+
+        _money -= amount;
+        return true;
+    }
+    public void RefreshCalculatedState()
+    {
+        RecalculateAsset();
+        NotifyStateChanged();
+    }
+    
+    private void NotifyStateChanged()
+    {
+        StateChanged?.Invoke();
+    }
+    
+    private void HandleMarketStateChanged()
+    {
+        NotifyStateChanged();
+    }
+    
+    private void RecalculateAsset()
+    {
+        _asset = _assetCalculator != null
+            ? _assetCalculator.CalculateAsset(_money)
+            : _money;
     }
     
     private void ValidateReferences()
@@ -79,60 +136,5 @@ public class ClickerRuntimeController : MonoBehaviour
                 "현재는 HUD 시장 상태 표시가 기본값으로만 동작합니다.",
                 this);
         }
-    }
-    
-    private void InitializeRuntime()
-    {
-        _money = _startMoney;
-
-        RecalculateAsset();
-        NotifyStateChanged();
-
-        // TODO: 저장 / 로드 시스템이 연결되면 초기값 세팅 후 로드 값으로 덮어쓴다.
-    }
-    
-    private void HandleMarketStateChanged()
-    {
-        NotifyStateChanged();
-    }
-
-    public void ExecuteTrade()
-    {
-        _money += CurrentClickIncome;
-
-        RecalculateAsset();
-        NotifyStateChanged();
-    }
-    
-    public void AddMoneyFromAutoIncome(double amount)
-    {
-        if (amount <= 0d) return;
-
-        _money += amount;
-
-        RecalculateAsset();
-        NotifyStateChanged();
-    }
-
-    public bool TrySpendMoney(double amount)
-    {
-        if (amount <= 0d) return false;
-        if (_money < amount) return false;
-
-        _money -= amount;
-        RecalculateAsset();
-        return true;
-    }
-    
-    private void RecalculateAsset()
-    {
-        // TEMP: 자동 투자 업그레이드 누적 비용 계산이 아직 없으므로
-        // 지금은 Asset을 Money와 동일하게 표시
-        _asset = _money;
-    }
-
-    public void NotifyStateChanged()
-    {
-        StateChanged?.Invoke();
     }
 }

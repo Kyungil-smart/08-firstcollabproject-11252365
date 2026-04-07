@@ -97,13 +97,13 @@ public class UpgradeStateController : MonoBehaviour
 
         if (!_stateById.TryGetValue(upgradeId, out UpgradeRuntimeState state)) return false;
         if (!_definitionById.TryGetValue(upgradeId, out UpgradeDataSO definition)) return false;
-        
+
         double nextCost = definition.GetNextCost(state.PurchaseCount);
 
         if (!_runtimeController.TrySpendMoney(nextCost)) return false;
-        
+
         state.IncreasePurchaseCount();
-        _runtimeController.NotifyStateChanged();
+        _runtimeController.RefreshCalculatedState();
         return true;
     }
 }

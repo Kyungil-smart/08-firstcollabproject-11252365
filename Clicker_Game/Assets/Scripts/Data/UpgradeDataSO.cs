@@ -81,4 +81,17 @@ public class UpgradeDataSO : ScriptableObject
         purchaseCount = Mathf.Max(0, purchaseCount);
         return _effectValue * purchaseCount;
     }
+
+    public double GetTotalPurchasedCost(int purchaseCount)
+    {
+        purchaseCount = Mathf.Max(0, purchaseCount);
+
+        double totalCost = 0d;
+        for (int i = 0; i < purchaseCount; i++)
+        {
+            totalCost += GetNextCost(i);
+        }
+
+        return totalCost;
+    }
 }
