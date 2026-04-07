@@ -80,14 +80,26 @@ public class ClickerRuntimeController : MonoBehaviour
         _money += amount;
         RefreshCalculatedState();
     }
-    public bool TrySpendMoney(double amount)
+
+    internal bool TryApplyPurchaseTransaction(double amount, Func<bool> applyPurchaseStateChange)
     {
         if (amount <= 0d) return false;
+        if (applyPurchaseStateChange == null) return false;
         if (_money < amount) return false;
 
         _money -= amount;
+
+        bool purchasedApplied = applyPurchaseStateChange.Invoke();
+        if (!purchasedApplied)
+        {
+            _money += amount;
+            return false;
+        }
+        
+        RefreshCalculatedState();
         return true;
     }
+    
     public void RefreshCalculatedState()
     {
         RecalculateAsset();

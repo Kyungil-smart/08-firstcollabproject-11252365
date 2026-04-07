@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +10,9 @@ public class UpgradeItemView : MonoBehaviour
     
     [Tooltip("현재 보유 Money 변화 런타임 참조")]
     [SerializeField] private ClickerRuntimeController _runtimeController;
+    
+    [Tooltip("구매 트랜잭션 처리 참조")]
+    [SerializeField] private UpgradePurchaseService _upgradePurchaseService;
     
     [Header("=====업그레이드 식별====")]
     [Tooltip("표시할 업그레이드의 ID")]
@@ -95,23 +97,21 @@ public class UpgradeItemView : MonoBehaviour
         if (_upgradeStateController.TryGetNextCost(_upgradeId, out double nextCost))
         {
             if (_nextCostText != null) _nextCostText.text = $"다음 비용 : ${nextCost:N0}";
-            
-            SetButtonInteractable(_runtimeController.Money >= nextCost);
+
+            bool canPurchase = _runtimeController.Money >= nextCost && _upgradePurchaseService != null;
+            SetButtonInteractable(canPurchase);
         }
         else
         {
             if (_nextCostText != null) _nextCostText.text = "다음 비용 : -";
-            
             SetButtonInteractable(false);
         }
-
     }
 
     private void HandlePurchaseButtonClicked()
     {
-        if (_upgradeStateController == null) return;
-        
-        _upgradeStateController.TryPurchase(_upgradeId);
+        if (_upgradePurchaseService == null) return;
+        _upgradePurchaseService.TryPurchase(_upgradeId);
     }
 
     private void SetButtonInteractable(bool canPurchase)
@@ -119,5 +119,4 @@ public class UpgradeItemView : MonoBehaviour
         if (_purchaseButton == null) return;
         _purchaseButton.interactable = canPurchase;
     }
-    
 }
