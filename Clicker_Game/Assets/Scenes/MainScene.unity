@@ -3907,9 +3907,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickerRuntimeController
   _startMoney: 0
-  _startMarketState: 1
   _clickIncomeCalculator: {fileID: 664171006}
   _autoIncomeCalculator: {fileID: 664171007}
+  _marketStateController: {fileID: 1037182683}
 --- !u!114 &664171006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5019,6 +5019,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1037182682}
+  - component: {fileID: 1037182683}
   m_Layer: 0
   m_Name: MarketStateRoot
   m_TagString: Untagged
@@ -5041,6 +5042,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 613636748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1037182683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037182681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b557bed74990e6248b69581dab43e1ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MarketStateController
+  _marketStateDefinitions:
+  - {fileID: 11400000, guid: f24671e803e9b38448113e9cbb31e407, type: 2}
+  - {fileID: 11400000, guid: 15ae58b0f5d4a034dab8a1953cf970e4, type: 2}
+  - {fileID: 11400000, guid: 28f125918a4984a429457e4af4a336c3, type: 2}
+  _startState: {fileID: 11400000, guid: 15ae58b0f5d4a034dab8a1953cf970e4, type: 2}
+  _changeInterval: 20
 --- !u!1 &1058431385
 GameObject:
   m_ObjectHideFlags: 0
