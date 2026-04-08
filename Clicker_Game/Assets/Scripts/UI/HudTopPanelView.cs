@@ -49,10 +49,8 @@ public class HudTopPanelView : MonoBehaviour
         _marketStateValueText.text = _runtimeController.CurrentMarketStateDisplayName;
         _clickPowerValueText.text = FormatNumber(_runtimeController.ClickPower);
         _autoIncomeValueText.text = $"{FormatCurrency(_runtimeController.AutoIncomePerSecond)}/s";
-        
-        // TODO: 큰 수 표기 (K / M / B)
     }
 
-    private string FormatCurrency(double value) => $"${value:N0}";
-    private string FormatNumber(double value) => value.ToString("N0");
+    private string FormatCurrency(double value) => NumberTextFormatter.FormatCurrency(value);
+    private string FormatNumber(double value) => NumberTextFormatter.FormatNumber(value);
 }

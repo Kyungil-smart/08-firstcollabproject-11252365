@@ -80,7 +80,5 @@ public class ClickRewardPopupSpawner : MonoBehaviour, IPointerClickHandler
         Destroy(popupInstance.gameObject);
     }
     
-    
-    private string FormatCurrency(double value) => $"${value:N0}";
-    
+    private string FormatCurrency(double value) => NumberTextFormatter.FormatCurrency(value);
 }
