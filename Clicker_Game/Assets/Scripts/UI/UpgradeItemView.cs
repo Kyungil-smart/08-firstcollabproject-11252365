@@ -96,7 +96,8 @@ public class UpgradeItemView : MonoBehaviour
 
         if (_upgradeStateController.TryGetNextCost(_upgradeId, out double nextCost))
         {
-            if (_nextCostText != null) _nextCostText.text = $"다음 비용 : ${nextCost:N0}";
+            if (_nextCostText != null) 
+                _nextCostText.text = $"다음 비용 : {NumberTextFormatter.FormatCurrency(nextCost)}";
 
             bool canPurchase = _runtimeController.Money >= nextCost && _upgradePurchaseService != null;
             SetButtonInteractable(canPurchase);
