@@ -4825,7 +4825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8730a5897af32344f888ac7d7c061e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickerRuntimeController
-  _startMoney: 0
+  _startMoney: 100
   _assetCalculator: {fileID: 664171009}
   _clickIncomeCalculator: {fileID: 664171006}
   _autoIncomeCalculator: {fileID: 664171007}
@@ -4873,7 +4873,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AutoIncomeTicker
   _runtimeController: {fileID: 664171005}
   _autoIncomeCalculator: {fileID: 664171007}
-  _tickInterval: 0.1
+  _tickInterval: 1
 --- !u!114 &664171009
 MonoBehaviour:
   m_ObjectHideFlags: 0

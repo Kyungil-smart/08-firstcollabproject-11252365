@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using UnityEngine.Pool;
 
 public class ClickRewardPopupSpawner : MonoBehaviour, IPointerClickHandler
 {
@@ -24,10 +26,91 @@ public class ClickRewardPopupSpawner : MonoBehaviour, IPointerClickHandler
     
     [Tooltip("유지 되는 시간")]
     [SerializeField] private float _duration = 0.6f;
+    
+    [Header("====오브젝트 풀 설정====")]
+    [Tooltip("시작 시 미리 생성해 둘 클릭 팝업 개수")]
+    [SerializeField, Min(0)] private int _prewarmCount = 10;
 
+    [Tooltip("풀 내부 스택의 기본 용량")]
+    [SerializeField, Min(1)] private int _defaultPoolCapacity = 10;
+
+    [Tooltip("동시에 유지할 최대 팝업 개수")]
+    [SerializeField, Min(1)] private int _maxPoolSize = 25;
+    
+    private ObjectPool<TMP_Text> _popupPool;
+    private Color _defaultPopupColor;
+
+    private void Awake()
+    {
+        if (_popupTemplate == null || _popupParent == null) return;
+        
+        _defaultPopupColor = _popupTemplate.color;
+        _popupTemplate.gameObject.SetActive(false);
+
+        _popupPool = new ObjectPool<TMP_Text>(
+            createFunc: CreatePopupInstance,
+            actionOnGet: OnGetPopup,
+            actionOnRelease: OnReleasePopup,
+            actionOnDestroy: OnDestroyPopup,
+            collectionCheck: true,
+            defaultCapacity: _defaultPoolCapacity,
+            maxSize: _maxPoolSize
+        );
+
+        PrewarmPool();
+    }
+    
+    private void OnDestroy() => _popupPool?.Clear();
+    
+    private TMP_Text CreatePopupInstance()
+    {
+        TMP_Text popupInstance = Instantiate(_popupTemplate, _popupParent);
+        popupInstance.gameObject.SetActive(false);
+        popupInstance.color = _defaultPopupColor;
+        return popupInstance;
+    }
+
+    private void OnGetPopup(TMP_Text popupInstance)
+    {
+        popupInstance.gameObject.SetActive(true);
+        popupInstance.color = _defaultPopupColor;
+    }
+
+    private void OnReleasePopup(TMP_Text popupInstance)
+    {
+        popupInstance.text = string.Empty;
+        popupInstance.color = _defaultPopupColor;
+        popupInstance.rectTransform.anchoredPosition = Vector2.zero;
+        popupInstance.gameObject.SetActive(false);
+    }
+
+    private void OnDestroyPopup(TMP_Text popupInstance)
+    {
+        if (popupInstance == null) return;
+        Destroy(popupInstance.gameObject);
+    }
+
+    private void PrewarmPool()
+    {
+        if (_popupPool == null) return;
+        if (_prewarmCount <= 0) return;
+        
+        List<TMP_Text> prewarmedItems = new(_prewarmCount);
+
+        for (int i = 0; i < _prewarmCount; i++)
+        {
+            prewarmedItems.Add(_popupPool.Get());
+        }
+
+        for (int i = 0; i < prewarmedItems.Count; i++)
+        {
+            _popupPool.Release(prewarmedItems[i]);
+        }
+    }
+    
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (_runtimeController == null || _popupParent == null ||  _popupTemplate == null)
+        if (_runtimeController == null || _popupParent == null || _popupTemplate == null || _popupPool == null)
             return;
         
         CreatePopup(eventData.position, eventData.pressEventCamera, _runtimeController.CurrentClickIncome);
@@ -35,8 +118,7 @@ public class ClickRewardPopupSpawner : MonoBehaviour, IPointerClickHandler
 
     private void CreatePopup(Vector2 screenPos, Camera eventCamera, double reward)
     {
-        TMP_Text popupInstance = Instantiate(_popupTemplate, _popupParent);
-        popupInstance.gameObject.SetActive(true);
+        TMP_Text popupInstance = _popupPool.Get();
         popupInstance.text = $"+{FormatCurrency(reward)}";
         
         RectTransform popupRect = popupInstance.rectTransform;
@@ -76,8 +158,7 @@ public class ClickRewardPopupSpawner : MonoBehaviour, IPointerClickHandler
             yield return null;
         }
         
-        // TODO : 오브젝트 풀 
-        Destroy(popupInstance.gameObject);
+        _popupPool.Release(popupInstance);
     }
     
     private string FormatCurrency(double value) => NumberTextFormatter.FormatCurrency(value);
