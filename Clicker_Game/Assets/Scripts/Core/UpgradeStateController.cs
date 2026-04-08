@@ -101,7 +101,7 @@ public class UpgradeStateController : MonoBehaviour
 
         foreach (UpgradeStateSaveData loadedState in loadedStates)
         {
-            if (loadedState == null) return;
+            if (loadedState == null) continue;
 
             if (_stateById.TryGetValue(loadedState.UpgradeId, out UpgradeRuntimeState state))
             {
