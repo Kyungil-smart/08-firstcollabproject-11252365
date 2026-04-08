@@ -25,6 +25,9 @@ public class SaveController : MonoBehaviour
     [Tooltip("주기 자동 저장 간격(초)\n기본값은 60초")]
     [SerializeField, Min(1f)] private float _autoSaveIntervalSeconds = 60f;
 
+    private readonly SaveFileCodec _saveFileCodec = new();
+    private readonly SaveDataValidator _saveDataValidator = new();
+
     private float _autoSaveElapsedTime;
     
     private void OnEnable()
@@ -50,30 +53,31 @@ public class SaveController : MonoBehaviour
 
     public bool HasSaveFile() => File.Exists(GetSaveFilePath());
 
-    public void Save()
+    public bool Save()
     {
-        if (_runtimeController == null) return;
-        if (_upgradeStateController == null) return;
+        if (_runtimeController == null) return false;
+        if (_upgradeStateController == null) return false;
 
-        var saveData = new ClickerSaveData { Money = _runtimeController.Money };
-
-        foreach (UpgradeRuntimeState state in _upgradeStateController.StateById.Values)
+        try
         {
-            if (state == null) continue;
+            ClickerSaveData saveData = CreateSaveData();
+            SaveEnvelope envelope = CreateEnvelope(saveData);
             
-            saveData.UpgradeStates.Add(new UpgradeStateSaveData
-            {
-                UpgradeId = state.UpgradeId,
-                PurchaseCount = state.PurchaseCount
-            });
+            string envelopeJson = JsonUtility.ToJson(envelope, true);
+            File.WriteAllText(GetSaveFilePath(), envelopeJson);
+            
+            _autoSaveElapsedTime = 0f;
+            
+            Debug.Log($"[SaveController] 저장 완료 : {GetSaveFilePath()}", this);
+            return true;
         }
-
-        string json = JsonUtility.ToJson(saveData, true);
-        File.WriteAllText(GetSaveFilePath(), json);
-        
-        _autoSaveElapsedTime = 0f;
-        
-        Debug.Log($"[SaveController] 저장 완료 : {GetSaveFilePath()}", this);
+        catch (Exception e)
+        {
+            Debug.LogWarning(
+                $"[SaveController] 저장에 실패했습니다. reason : {e.Message}",
+                this);
+            return false;
+        }
     }
 
     public bool Load()
@@ -82,19 +86,28 @@ public class SaveController : MonoBehaviour
         if (_upgradeStateController == null) return false;
         if (_marketStateController == null) return false;
         if (!HasSaveFile()) return false;
-        
-        string json = File.ReadAllText(GetSaveFilePath());
-        ClickerSaveData saveData = JsonUtility.FromJson<ClickerSaveData>(json);
 
-        if (saveData == null) return false;
-        
-        _runtimeController.SetMoneyFromSave(saveData.Money);
-        _upgradeStateController.ApplyLoadedPurchaseCounts(saveData.UpgradeStates);
+        bool loadedSaveData = TryReadSaveData(out ClickerSaveData saveData);
+        if (!loadedSaveData) return false;
+
+        bool validated = _saveDataValidator.TryValidate(
+            saveData,
+            _upgradeStateController.StateById,
+            out ValidatedSaveState validatedSaveState);
+
+        if (!validated || validatedSaveState == null)
+        {
+            Debug.LogWarning("[SaveController] 저장 데이터 검증에 실패했습니다.", this);
+            return false;
+        }
+
+        ApplyValidatedSaveState(validatedSaveState);
+
         _marketStateController.ResetStateForLoad();
         _runtimeController.RefreshCalculatedState();
-        
+
         _autoSaveElapsedTime = 0f;
-        
+
         Debug.Log($"[SaveController] 로드 완료 : {GetSaveFilePath()}", this);
         return true;
     }
@@ -134,6 +147,114 @@ public class SaveController : MonoBehaviour
         if (_autoSaveElapsedTime < _autoSaveIntervalSeconds) return;
 
         Save();
+    }
+
+    private ClickerSaveData CreateSaveData()
+    {
+        ClickerSaveData saveData = new()
+        {
+            Money = _runtimeController.Money
+        };
+
+        foreach (UpgradeRuntimeState state in _upgradeStateController.StateById.Values)
+        {
+            if (state == null) continue;
+
+            saveData.UpgradeStates.Add(new UpgradeStateSaveData
+            {
+                UpgradeId = state.UpgradeId,
+                PurchaseCount =  state.PurchaseCount
+            });
+        }
+        
+        return saveData;
+    }
+
+    private SaveEnvelope CreateEnvelope(ClickerSaveData saveData)
+    {
+        string payloadJson = JsonUtility.ToJson(saveData);
+        string encodedPayload = _saveFileCodec.Encode(payloadJson);
+
+        return new SaveEnvelope
+        {
+            Version = 1,
+            EncodedPayload = encodedPayload,
+            Checksum = _saveFileCodec.ComputeChecksum(encodedPayload)
+        };
+    }
+    
+    private bool TryReadSaveData(out ClickerSaveData saveData)
+    {
+        saveData = null;
+
+        string envelopeJson;
+        try
+        {
+            envelopeJson = File.ReadAllText(GetSaveFilePath());
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(
+                $"[SaveController] 저장 파일 읽기에 실패했습니다. reason : {e.Message}",
+                this);
+            return false;
+        }
+
+        SaveEnvelope envelope = JsonUtility.FromJson<SaveEnvelope>(envelopeJson);
+        if (envelope == null)
+        {
+            Debug.LogWarning("[SaveController] 저장 파일 envelope 역직렬화에 실패했습니다.", this);
+            return false;
+        }
+
+        if (envelope.Version != 1)
+        {
+            Debug.LogWarning(
+                $"[SaveController] 지원하지 않는 저장 파일 버전입니다. version : {envelope.Version}",
+                this);
+            return false;
+        }
+
+        bool checksumValid = _saveFileCodec.ValidateChecksum(
+            envelope.EncodedPayload,
+            envelope.Checksum);
+
+        if (!checksumValid)
+        {
+            Debug.LogWarning("[SaveController] 저장 파일 checksum 검증에 실패했습니다.", this);
+            return false;
+        }
+
+        bool decoded = _saveFileCodec.TryDecode(
+            envelope.EncodedPayload,
+            out string payloadJson);
+
+        if (!decoded)
+        {
+            Debug.LogWarning("[SaveController] 저장 payload decode에 실패했습니다.", this);
+            return false;
+        }
+
+        saveData = JsonUtility.FromJson<ClickerSaveData>(payloadJson);
+        if (saveData == null)
+        {
+            Debug.LogWarning("[SaveController] 저장 payload 역직렬화에 실패했습니다.", this);
+            return false;
+        }
+
+        return true;
+    }
+    
+    private void ApplyValidatedSaveState(ValidatedSaveState validatedSaveState)
+    {
+        if (validatedSaveState == null)
+        {
+            Debug.LogWarning("[SaveController] 적용할 검증 완료 저장 상태가 없습니다.", this);
+            return;
+        }
+
+        _runtimeController.SetMoneyFromSave(validatedSaveState.Money);
+        _upgradeStateController.SetPurchaseCounts(validatedSaveState.PurchaseCountsById);
     }
     
     private string GetSaveFilePath() => Path.Combine(Application.persistentDataPath, _saveFileName);

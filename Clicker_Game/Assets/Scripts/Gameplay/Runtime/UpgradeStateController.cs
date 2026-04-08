@@ -90,23 +90,52 @@ public class UpgradeStateController : MonoBehaviour
         return true;
     }
 
-    public void ApplyLoadedPurchaseCounts(List<UpgradeStateSaveData> loadedStates)
+    public void ResetAllPurchaseCounts()
     {
         foreach (UpgradeRuntimeState state in _stateById.Values)
         {
             state.SetPurchaseCount(0);
         }
-        
-        if (loadedStates == null) return;
+    }
 
-        foreach (UpgradeStateSaveData loadedState in loadedStates)
+    public void SetPurchaseCounts(IReadOnlyDictionary<string, int> purchaseCountsById)
+    {
+        if (purchaseCountsById == null)
         {
-            if (loadedState == null) continue;
+            Debug.LogWarning("[UpgradeStateController] 적용할 구매 수 데이터가 비어 있습니다.", this);
+            return;
+        }
 
-            if (_stateById.TryGetValue(loadedState.UpgradeId, out UpgradeRuntimeState state))
+        foreach (KeyValuePair<string, int> pair in purchaseCountsById)
+        {
+            if (string.IsNullOrWhiteSpace(pair.Key))
             {
-                state.SetPurchaseCount(loadedState.PurchaseCount);
+                Debug.LogWarning("[UpgradeStateController] 업그레이드 ID가 비어 있습니다.", this);
+                return;
+            }
+
+            if (pair.Value < 0)
+            {
+                Debug.LogWarning(
+                    $"[UpgradeStateController] 업그레이드 구매 수는 음수가 될 수 없습니다. id : {pair.Key}",
+                    this);
+                return;
+            }
+
+            if (!_stateById.ContainsKey(pair.Key))
+            {
+                Debug.LogWarning(
+                    $"[UpgradeStateController] 등록되지 않은 업그레이드 ID입니다. id : {pair.Key}",
+                    this);
+                return;
             }
         }
+
+        ResetAllPurchaseCounts();
+        foreach (KeyValuePair<string, int> pair in purchaseCountsById)
+        {
+            _stateById[pair.Key].SetPurchaseCount(pair.Value);
+        }
     }
+    
 }
