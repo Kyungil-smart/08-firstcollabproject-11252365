@@ -23,6 +23,10 @@ public class GameAudioController : MonoBehaviour
 
     [Tooltip("저장값 없을 때 사용할 SFX 볼륨")]
     [SerializeField, Range(0f, 1f)] private float _defaultSfxVolume = 1f;
+    
+    [Header("====공용 UI 효과음====")]
+    [Tooltip("모든 버튼 클릭에 공용으로 사용할 SFX 클립")]
+    [SerializeField] private AudioClip _uiClickClip;
 
     private const string BGM_VOLUME_KEY = "option.bgm_volume";
     private const string SFX_VOLUME_KEY = "option.sfx_volume";
@@ -69,5 +73,13 @@ public class GameAudioController : MonoBehaviour
 
         PlayerPrefs.SetFloat(SFX_VOLUME_KEY, clampedVolume);
         PlayerPrefs.Save();
+    }
+
+    public void PlayUiClick()
+    {
+        if (_sfxSource == null) return;
+        if (_uiClickClip == null) return;
+        
+        _sfxSource.PlayOneShot(_uiClickClip);
     }
 }
