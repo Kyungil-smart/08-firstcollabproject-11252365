@@ -68,6 +68,7 @@ public class ClickerRuntimeController : MonoBehaviour
     }
     
     public void SetMoneyFromSave(double money) => _money = Math.Max(0d, money);
+    public void ResetMoneyToStartValue() => _money = Math.Max(0d, _startMoney);
     
     public void ExecuteTrade()
     {

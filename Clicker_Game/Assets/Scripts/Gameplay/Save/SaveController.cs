@@ -111,6 +111,16 @@ public class SaveController : MonoBehaviour
         Debug.Log($"[SaveController] 로드 완료 : {GetSaveFilePath()}", this);
         return true;
     }
+    
+    public void ResetProgressFromButton()
+    {
+        bool resetSucceeded = TryResetProgress();
+
+        if (!resetSucceeded)
+        {
+            Debug.LogWarning("[SaveController] 버튼을 통한 세이브 초기화에 실패했습니다.", this);
+        }
+    }
 
     [ContextMenu("세이브 실행")]
     private void SaveFromContextMenu() => Save();
@@ -118,7 +128,34 @@ public class SaveController : MonoBehaviour
     [ContextMenu("로드 실행")]
     private void LoadFromContextMenu() => Load();
 
+    [ContextMenu("초기화 실행")]
+    private void ResetFromContextMenu() => TryResetProgress();
+
     private void HandlePurchaseSucceeded(string upgradeId) => Save();
+    
+    private bool TryResetProgress()
+    {
+        if (_runtimeController == null) return false;
+        if (_upgradeStateController == null) return false;
+        if (_marketStateController == null) return false;
+
+        _runtimeController.ResetMoneyToStartValue();
+        _upgradeStateController.ResetAllPurchaseCounts();
+        _marketStateController.ResetStateForLoad();
+        _runtimeController.RefreshCalculatedState();
+
+        _autoSaveElapsedTime = 0f;
+
+        bool saved = Save();
+        if (!saved)
+        {
+            Debug.LogWarning("[SaveController] 초기화 후 기본 상태 저장에 실패했습니다.", this);
+            return false;
+        }
+
+        Debug.Log("[SaveController] 세이브 데이터를 초기화했습니다.", this);
+        return true;
+    }
     
     private void TryAutoLoadOnStart()
     {
