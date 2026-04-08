@@ -17,7 +17,7 @@ MonoBehaviour:
   _category: 1
   _description: "\uAD6C\uB9E4 1\uD68C\uB2F9 \uC790\uB3D9 \uC218\uC775 \uCD94\uAC00
     \uBC30\uC728 +10%"
-  _baseCost: 10
+  _baseCost: 70
   _costGrowthMultiplier: 1.15
   _effectValue: 0.1
   _effectType: 4

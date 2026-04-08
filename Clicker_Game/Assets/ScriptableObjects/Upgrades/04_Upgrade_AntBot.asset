@@ -16,7 +16,7 @@ MonoBehaviour:
   _name: "\uAC1C\uBBF8 \uBD07"
   _category: 1
   _description: "\uAD6C\uB9E4 1\uD68C\uB2F9 \uCD08\uB2F9 \uC218\uC775 +1"
-  _baseCost: 10
+  _baseCost: 30
   _costGrowthMultiplier: 1.15
   _effectValue: 1
   _effectType: 2
